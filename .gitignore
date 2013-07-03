@@ -1,2 +1,4 @@
 .chef
 Berksfile.lock
+site-cookbooks
+!site-cookbooks/.gitkeep
