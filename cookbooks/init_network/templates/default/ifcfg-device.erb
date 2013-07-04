@@ -1,0 +1,36 @@
+<% if @device %>
+DEVICE=<%=        @device %>
+<% end %>
+<% if @type %>
+TYPE=<%=          @type %>
+<% end %>
+<% if @onboot %>
+ONBOOT=<%=        @onboot %>
+<% end  %>
+<% if  @nm_controlled %>
+NM_CONTROLLED=<%= @nm_controlled %>
+<% end %>
+<% if @bootproto %>
+BOOTPROTO=<%=     @bootproto %>
+<% end %>
+<% if @ipaddr %>
+IPADDR=<%=        @ipaddr %>
+<% end %>
+<% if @netmask %>
+NETMASK=<%=       @netmask %>
+<% end %>
+<% if @prefix %>
+PREFIX=<%=        @prefix  %>
+<% end %>
+<% if @gateway %>
+GATEWAY=<%=       @gateway %>
+<% end %>
+<% if @dns1 %>
+DNS1=<%=          @dns1 %>
+<% end %>
+<% if @dns2 %>
+DNS2=<%=          @dns2 %>
+<% end %>
+<% @others.each do |line| %>
+<%= line %>
+<% end %>

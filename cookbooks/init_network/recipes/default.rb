@@ -12,7 +12,6 @@ if node[:init_network][:ipv6disable]
   include_recipe "init_network::ipv6disable"
 end
 
-
 include_recipe "init_network::host"
-
+include_recipe "init_network::ifcfg-device"
 

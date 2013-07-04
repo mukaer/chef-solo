@@ -12,7 +12,7 @@ init_network Cookbook
    /etc/hosts.allow
    /etc/hosts.dany
 * ifcfg
-   /etc/sysconfig/network-scripts/ifcfg-eth0
+   /etc/sysconfig/network-scripts/ifcfg-eth*
 
 
 e.g.
@@ -70,7 +70,22 @@ Just include `init_network` in your node's `run_list`:
                     "::1        localhost chef chef.mukaer.com"],
     "hosts_allow"  : ["ALL:127.0.0.1",
                       "ALL:192.168.0.0/255.255.255.0"],
-    "hosts_deny"  : ["ALL:ALL"]
+    "hosts_deny"  : ["ALL:ALL"],
+	"ifcfg_device": [ { "device"        :"eth0",
+						"type"	        : "ethernet",
+						"onboot"        : "yes",
+						"nm_controlled" :"yes",
+						"bootproto"     :"none",
+						"ipaddr"        :"192.168.0.33",
+						"netmask"       :"255.255.255.0",
+						"gateway"       :"192.168.0.1",
+						"dns1"          :"192.168.0.1",
+						"dns2"          :"8.8.8.8",
+	                    "others" :["#BRIDGE=br0",
+                                   "#BONDING",
+							       "#SLAVE=yes",
+							       "#MASTER=bond0"]
+					   }]
     }
     
 

@@ -15,8 +15,10 @@ class Initconf
   
 
   def load_file(path)
-    reset_cont()    
-    @org_cont = File.read(path).split("\n")
+    reset_cont()
+
+    @org_cont = File.read(path).split("\n")  if File.exist? path
+
     converter()    
   end
 
@@ -51,7 +53,7 @@ class Initconf
 
   
   def get_value(name)
-    @cont[name]
+     @cont.key?(name) ? @cont[name] : nil 
   end
 
   
