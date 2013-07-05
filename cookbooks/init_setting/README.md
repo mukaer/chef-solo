@@ -6,6 +6,9 @@ init_setting Cookbook
 * pam
   /etc/pamd.d/su
 
+* timezone
+  /etc/localtime
+
 Requirements
 ------------
 TODO: List your cookbook requirements. Be sure to include any requirements this cookbook has on platforms, libraries, other cookbooks, packages, operating systems, etc.
@@ -48,7 +51,11 @@ Just include `init_setting` in your node's `run_list`:
   "name":"my_node",
   "run_list": [
     "recipe[init_setting]"
-  ]
+  ],
+
+ "init_setting": {
+	 "timezone" : "Japan"
+ }
 }
 ```
 

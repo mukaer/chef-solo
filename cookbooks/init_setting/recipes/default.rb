@@ -20,3 +20,11 @@ template "/etc/pam.d/su" do
   mode  "0644"
 
 end  
+
+
+timezone = node[:init_setting][:timezone] if node[:init_setting].key?(:timezone)
+execute "time zone" do
+  command "ln -f /usr/share/zoneinfo/#{timezone} /etc/localtime ;hwclock --localtime --hctosys"
+
+
+end unless  timezone.nil? || timezone.empty?
