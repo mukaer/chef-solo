@@ -11,20 +11,26 @@
 template "/etc/ssh/sshd_config" do
   source "ssh/sshd_config"
   mode  "0644"
-
 end  
 
 
 template "/etc/pam.d/su" do
   source "pam.d/su"
   mode  "0644"
-
 end  
 
 
 timezone = node[:init_setting][:timezone] if node[:init_setting].key?(:timezone)
 execute "time zone" do
   command "ln -f /usr/share/zoneinfo/#{timezone} /etc/localtime ;hwclock --localtime --hctosys"
-
-
 end unless  timezone.nil? || timezone.empty?
+
+
+lang = node[:init_setting][:lang] if node[:init_setting].key?(:lang)
+template "/etc/sysconfig/i18n" do
+  source "sysconfig/i18n.erb"
+  mode  "0644"
+  variables({
+     :lang => lang
+  })
+end unless lang.nil? || lang.empty?

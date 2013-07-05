@@ -9,6 +9,9 @@ init_setting Cookbook
 * timezone
   /etc/localtime
 
+* i18n
+  /etc/sysconfig/i18n
+
 Requirements
 ------------
 TODO: List your cookbook requirements. Be sure to include any requirements this cookbook has on platforms, libraries, other cookbooks, packages, operating systems, etc.
@@ -54,7 +57,8 @@ Just include `init_setting` in your node's `run_list`:
   ],
 
  "init_setting": {
-	 "timezone" : "Japan"
+     "timezone" : "Japan",
+     "lang"     : "ja_JP.UTF-8"
  }
 }
 ```
