@@ -34,3 +34,33 @@ template "/etc/sysconfig/i18n" do
      :lang => lang
   })
 end unless lang.nil? || lang.empty?
+
+
+
+execute "yum update" do
+  command "yum -y update"
+end
+
+execute "yum groupinstall " do
+  command 'yum -y groupinstall "Base" "Development Tools" '
+end
+
+package "yum-cron" do
+  action :install
+end
+
+service "yum-cron" do
+  action :enable
+end
+
+service "yum-cron" do
+  action :start
+end
+
+
+packages = node[:init_setting][:packages] if node[:init_setting].key?(:packages)
+packages.each do |pkg|
+  package pkg do
+    action :install
+  end
+end unless packages.nil?
