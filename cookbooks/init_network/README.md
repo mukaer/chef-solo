@@ -2,17 +2,22 @@ init_network Cookbook
 =====================
 
 
-* ipv6 disable
-   /etc/modprobe.d/ipv6block.conf
-   /etc/sysconfig/network
-* host
-   /etc/sysconfig/network
-   /etc/host.conf
-   /etc/hosts
-   /etc/hosts.allow
-   /etc/hosts.dany
-* ifcfg
-   /etc/sysconfig/network-scripts/ifcfg-eth*
+## ipv6 disable
+     /etc/modprobe.d/ipv6block.conf
+     /etc/sysconfig/network
+   
+## host
+     /etc/sysconfig/network
+     /etc/host.conf
+     /etc/hosts
+     /etc/hosts.allow
+     /etc/hosts.dany
+     
+## dns
+     /etc/resolv.conf
+     
+## ifcfg
+     /etc/sysconfig/network-scripts/ifcfg-eth*
 
 
 e.g.
@@ -71,6 +76,10 @@ Just include `init_network` in your node's `run_list`:
     "hosts_allow"  : ["ALL:127.0.0.1",
                       "ALL:192.168.0.0/255.255.255.0"],
     "hosts_deny"  : ["ALL:ALL"],
+
+    "nameservers"  : ["8.8.8.8","8.8.4.4"],
+	"resolv_others": [],
+    
 	"ifcfg_device": [ { "device"        :"eth0",
 						"type"	        : "ethernet",
 						"onboot"        : "yes",
