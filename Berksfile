@@ -1,6 +1,7 @@
 site :opscode
 
 cookbook 'selinux'
+cookbook 'ntp'
 cookbook 'zsh'
 cookbook 'git'
 cookbook 'tmux'
