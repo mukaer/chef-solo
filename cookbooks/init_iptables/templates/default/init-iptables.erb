@@ -1,0 +1,67 @@
+#!/bin/sh
+
+############################################################
+iptables -F
+iptables -X
+
+iptables -P INPUT   DROP
+iptables -P FORWARD DROP
+iptables -P OUTPUT  DROP
+
+iptables -A INPUT  -i lo -j ACCEPT
+iptables -A OUTPUT -o lo -j ACCEPT
+
+
+############################################################
+#other syn drop
+iptables -A INPUT -p tcp ! --syn -m state --state NEW -j DROP
+
+
+############################################################
+#@ips
+<% @ips.each do |ip| %>
+iptables -A INPUT  -s <%= ip %> -j ACCEPT
+iptables -A OUTPUT -d <%= ip %> -j ACCEPT
+
+<% end %>
+
+############################################################
+#INPUT POLICY
+
+#CONNETED OK
+iptables -A INPUT 1  -m state --state ESTABLISHED,RELATED  -j ACCEPT 
+
+#@input_tcp_ports
+<% @input_tcp_ports.each do |port| %>
+iptables -A INPUT  -p tcp -j ACCEPT --dport <%= port %> -m state --state NEW
+<% end %>
+
+#@input_udp_ports
+<% @input_udp_ports.each do |port| %>
+iptables -A INPUT  -p udp -j ACCEPT --dport <%= port %> -m state --state NEW
+<% end %>
+
+
+############################################################
+#OUTPUT POLICY
+
+#CONNETED OK
+iptables -I OUTPUT 1 -m state  --state ESTABLISHED,RELATED -j ACCEPT
+
+#ping
+iptables -A OUTPUT -p icmp -j ACCEPT --icmp-type echo-request
+
+#@output_tcp_ports
+<% @output_tcp_ports.each do |port| %>
+iptables -A OUTPUT -p tcp  --dport <%= port %> -m state --state NEW -j ACCEPT
+<% end %>
+
+#@output_udp_ports
+<% @output_udp_ports.each do |port| %>
+iptables -A OUTPUT -p udp  --dport <%= port %> -m state --state NEW -j ACCEPT
+<% end %>
+
+
+############################################################
+#save
+service iptables save
