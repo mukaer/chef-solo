@@ -13,6 +13,13 @@ include_recipe "rbenv::default"
 include_recipe "rbenv::ruby_build"
 include_recipe "rbenv::rbenv_vars"
 
+
+packages = "sqlite-devel mysql-devel libxml2-devel libxslt-devel"
+packages.split(" ").each do |pkg|
+  package pkg
+end
+
+
 rbenv_ruby RUBY_VER
 
 rbenv_gem "bundler" do
