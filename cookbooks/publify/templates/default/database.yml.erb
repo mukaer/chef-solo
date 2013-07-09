@@ -1,0 +1,19 @@
+login: &login
+  adapter:  <%= @adpter %>
+  host:     <%= @host %>
+  username: <%= @username %>
+  password: <%= @password %>
+  encoding: <%= @encoding %>
+ 
+ 
+development:
+  database: typo_dev
+  <<: *login
+ 
+test:
+  database: typo_tests
+  <<: *login
+ 
+production:
+  database: typo
+  <<: *login
