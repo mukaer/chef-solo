@@ -41,7 +41,7 @@ if node[:init_user][:deploy_pubkey]
   end
 end
 
-user "unicron" do
+user "unicorn" do
   action :create
   gid "www"
 end

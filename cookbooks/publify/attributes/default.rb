@@ -1,6 +1,6 @@
 default['publify']['user']       = "deploy"
 default['publify']['group']      = "www"
-default['publify']['rack_user']  = "unicron"
+default['publify']['rack_user']  = "unicorn"
 
 
 default['publify']['git_repository']  = "https://github.com/fdv/publify.git"
