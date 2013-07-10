@@ -1,7 +1,6 @@
 app_root = node[:publify][:app_root]
 root = File.dirname  app_root
 
-
 directory root do
   action :create
   user  node[:publify][:user]
@@ -18,8 +17,18 @@ git app_root do
 end
 
 
-directory "#{app_root}/tmp" do
-  action :create
-  user  node[:publify][:user]
-  group node[:publify][:group]
+chmod_dirs = node[:publify][:chmod_dirs]
+
+chmod_dirs.each do |path|
+  directory "#{app_root}#{path}" do
+    action :create
+    user  node[:publify][:user]
+    group node[:publify][:group]
+    mode "0775"
+  end
 end
+
+
+
+
+

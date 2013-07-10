@@ -1,0 +1,49 @@
+
+APP_ROOT = File.expand_path '../', File.dirname(__FILE__)
+
+worker_processes <%= @worker_processes %>
+working_directory APP_ROOT
+
+ 
+# unix domain tcp
+listen  "#{APP_ROOT}/tmp/unicorn.sock"
+listen  <%= @port %>,:tcp_nopush => true
+
+#tcp
+#listen  '0.0.0.0:<%= @port %>',:tcp_nopush => true
+
+#pid
+pid "#{APP_ROOT}/tmp/unicorn.pid"
+
+
+#log
+stdout_path "#{APP_ROOT}/log/unicorn-access.log"
+stderr_path "#{APP_ROOT}/log/unicorn-error.log"
+
+ 
+
+# combine Ruby 2.0.0dev or REE with "preload_app true" for memory savings
+# http://rubyenterpriseedition.com/faq.html#adapt_apps_for_cow
+preload_app true
+GC.respond_to?(:copy_on_write_friendly=) and
+    GC.copy_on_write_friendly = true
+
+#lan only 
+check_client_connection false
+
+before_fork do |server, worker|
+  defined?(ActiveRecord::Base) and ActiveRecord::Base.connection.disconnect!
+ 
+
+  old_pid = "#{ server.config[:pid] }.oldbin"
+  unless old_pid == server.pid
+    begin
+      Process.kill :QUIT, File.read(old_pid).to_i
+    rescue Errno::ENOENT, Errno::ESRCH
+    end
+  end
+end
+ 
+after_fork do |server, worker|
+  defined?(ActiveRecord::Base) and ActiveRecord::Base.establish_connection
+end
