@@ -49,9 +49,17 @@ Just include `init_user` in your node's `run_list`:
     "recipe[init_user]"
   ],
  "init_user" :{
-	 "deploy_pubkey": "ssh-rsa AAAA..............."
+	 "deploy_auth_keys"   : ["ssh-rsa AAAAB3Nza.........ND1cIQ== mukaer@localhost.localdomain" ],
+     "deploy_id_rsa"      : "-----BEGIN RSA PRIVATE KEY-----\nMIIEo.....3tPqVsbk=\n-----END RSA PRIVATE KEY-----\n",
+	 "deploy_id_rsa_pub"  : "ssh-rsa AAAAB3Nza.....ka6A0w== mukaer@mukaer.com\n",
+	 "deploy_known_hosts" : ["mukaer.com,123.123.123.123 ssh-rsa AAAAB3Nza..........SiscQ=="]
  }
 }
+```
+
+```bsh
+#command 
+ruby -e 'p File.read("~/.ssh/id_rsa.pub")'
 ```
 
 Contributing
