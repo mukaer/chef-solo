@@ -1,0 +1,89 @@
+#!/bin/bash
+#
+# unicorn_<%= @name %>     Startup script for the UNICORN Server
+#
+# chkconfig: - 85 15
+# description: The UNICORN Server
+#              
+# processname: unicorn_<%= @name %>
+# config: <%= @config %>
+# pidfile: <%= @pid %>
+#
+### BEGIN INIT INFO
+# Provides:          UNICORN_<%= @name %>
+# Required-Start:    $all
+# Required-Stop:     $network $local_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start the APPLICATION unicorns at boot
+# Description:       Enable APPLICATION at boot time.
+### END INIT INFO
+# 
+# Use this as a basis for your own Unicorn init script.
+# Change APPLICATION to match your app.
+# Make sure that all paths are correct.
+
+
+set -u
+set -e
+user=<%= @user %>
+
+
+APP_ROOT=<%= @root %>
+PID=<%=      @pid %>
+CONFIG=<%=   @config %>
+SCMD="<%=    @start_cmd %>"
+ENV=<%=      @env %>
+
+
+SET_PATH="cd $APP_ROOT; source /etc/profile"
+CMD="$SET_PATH && $SCMD -D -E $ENV -c $CONFIG"
+
+
+old_pid="$PID.oldbin"
+
+cd $APP_ROOT || exit 1
+
+sig () {
+    test -s "$PID" && kill -$1 `cat $PID`
+}
+
+oldsig () {
+    test -s $old_pid && kill -$1 `cat $old_pid`
+}
+
+case ${1-help} in
+start)
+	sig 0 && echo >&2 "Already running" && exit 0
+	su - $user -c "$CMD"
+	;;
+stop)
+	sig QUIT && exit 0
+	echo >&2 "Not running"
+	;;
+force-stop)
+	sig TERM && exit 0
+	echo >&2 "Not running"
+	;;
+restart|reload)
+	sig HUP && echo reloaded OK && exit 0
+	echo >&2 "Couldn't reload, starting '$CMD' instead"
+	su - $user -c "$CMD"
+	;;
+upgrade)
+	sig USR2 && exit 0
+	echo >&2 "Couldn't upgrade, starting '$CMD' instead"
+	su - $user -c "$CMD"
+	;;
+
+#Don't run 
+#  not support logrotate postrotate 
+rotate)
+	sig USR1 && echo rotated logs OK && exit 0
+	echo >&2 "Couldn't rotate logs" && exit 1
+	;;
+*)
+	echo >&2 "Usage: $0 <start|stop|restart|upgrade|rotate|force-stop>"
+	exit 1
+	;;
+esac
