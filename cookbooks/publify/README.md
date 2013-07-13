@@ -53,7 +53,10 @@ Just include `publify` in your node's `run_list`:
     "db_adpter"   : "mysql2",
     "db_host"     : "localhost",
     "db_username" : "root",
-    "db_encoding" " "utf8"
+    "db_encoding" : "utf8",
+    "conf_uc_overwrite"  : true,
+    "gemfile_overwrite" : true
+    "rails_env"   : "production"
   }
 }
 ```

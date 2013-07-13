@@ -5,7 +5,10 @@ template "#{node[:publify][:app_root]}/config/database.yml" do
               :host     => node[:publify][:db_host],
               :username => node[:publify][:db_username],
               :password => node[:publify][:db_password],
-              :encoding => node[:publify][:db_encoding]
+              :encoding => node[:publify][:db_encoding],
+              :db_dev   => node[:publify][:db_dev],
+              :db_test  => node[:publify][:db_test],
+              :db_pro   => node[:publify][:db_pro],
               
             })
   user  node[:publify][:user]

@@ -7,13 +7,13 @@ login: &login
  
  
 development:
-  database: typo_dev
+  database: <%= @db_dev %>
   <<: *login
  
 test:
-  database: typo_tests
+  database: <%= @db_test %>
   <<: *login
  
 production:
-  database: typo
+  database: <%= @db_pro %>
   <<: *login
