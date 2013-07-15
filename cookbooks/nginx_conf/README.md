@@ -48,13 +48,16 @@ Just include `nginx_conf` in your node's `run_list`:
   "run_list": [
     "recipe[nginx_conf]"
   ],
-  "nginx_conf":[{
-      "site_name"  " "mukaer",
-      "listen"     : "80",
-      "server_name": "chef.mukaer.com",
-      "root"       : "/var/www/",
-      "servers"    : ["unix:/var/www/typo/tmp/unicorn.sock fail_timeout=0"]
-    }]
+  "nginx_conf":{
+    "default_conf_disabled" : true,
+    "confs" : [{
+        "site_name"  : "mukaer",
+        "listen"     : "80",
+        "server_name": "chef.mukaer.com",
+        "root"       : "/var/www/",
+        "servers"    : ["unix:/var/www/typo/tmp/unicorn.sock fail_timeout=0"]
+      }]
+  }
 }
 ```
 
