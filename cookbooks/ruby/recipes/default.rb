@@ -14,7 +14,7 @@ include_recipe "rbenv::ruby_build"
 include_recipe "rbenv::rbenv_vars"
 
 
-packages = "sqlite-devel mysql-devel libxml2-devel libxslt-devel"
+packages = "sqlite-devel mysql-devel libxml2-devel libxslt-devel ImageMagick"
 packages.split(" ").each do |pkg|
   package pkg
 end
