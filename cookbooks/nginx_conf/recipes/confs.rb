@@ -5,6 +5,10 @@
 
 node[:nginx_conf][:confs].each do |conf|
 
+  directory "/etc/nginx/conf.d/#{conf[:site_name]}" do
+    action :create
+  end
+
   template "/etc/nginx/conf.d/#{conf[:site_name]}.conf" do
     source "site.conf.erb"
     mode "0644"
@@ -13,7 +17,8 @@ node[:nginx_conf][:confs].each do |conf|
                 :listen      => conf[:listen],
                 :server_name => conf[:server_name],
                 :root        => conf[:root],
-                :servers     => conf[:servers]
+                :servers     => conf[:servers],
+                :include_confs    => conf[:includes_confs]
               })
                   
   end
