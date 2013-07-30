@@ -1,4 +1,10 @@
 .chef
+Gemfile.lock
 Berksfile.lock
+cookbooks/none
+cookbooks/test
 site-cookbooks
 !site-cookbooks/.gitkeep
+nodes/*
+!nodes/.gitkeep
+!nodes/example.json

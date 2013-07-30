@@ -1,0 +1,186 @@
+{"run_list":[
+	 "selinux::disabled",
+//	 "init_network",
+	 "init_user",
+	 "init_setting",
+	 "init_iptables",
+	 "ntp",
+	 "mysql",
+	 "mysql::server",
+	 "mysql_user",
+	 "rbenv",
+	 "ruby",
+	 "mkdir",
+	 "nginx",
+	 "nginx_conf",
+	 "publify",
+	 "deploy_project",
+ 	 "unicorn"
+ ],
+
+ "init_network" :{
+     "ipv6disable" : true,
+     "hostname"    : "test.mukaer.com",
+     "host"        : ["multi on","order hosts,bind"],
+     "hosts"       : ["127.0.0.1 localhost test test.mukaer.com",
+                      "::1       localhost test test.mukaer.com"],
+     "hosts_allow" : ["ALL:127.0.0.1",
+                      "ALL:192.168.0.0/255.255.255.0"],
+     "hosts_deny"  : ["ALL:ALL"],
+
+	 "nameservers"  : ["8.8.8.8","8.8.4.4"],
+//	 "resolv_others": [],
+
+	 "ifcfg_device": [ { "device"        :"eth0",
+						 "type"          : "ethernet",
+						 "onboot"        : "yes",
+						 "nm_controlled" :"yes",
+						 "bootproto"     :"none",
+						 "ipaddr"        :"192.168.0.33",
+						 "netmask"       :"255.255.255.0",
+						 "gateway"       :"192.168.0.1",
+						 "dns1"          :"8.8.8.8",
+						 "dns2"          :"8.8.4.4"
+//						 "others"        :["#BRIDGE=br0",
+//									       "#BONDING",
+//									       "#SLAVE=yes",
+//									       "#MASTER=bond0"]
+					   }]
+    },
+
+ "init_user" :{
+	 "deploy_auth_keys": ["ssh-rsa AAAAB3Nz....xND1cIQ== kaimu@dev.localdomain" ],
+     "deploy_id_rsa": "-----BEGIN RSA PRIVATE KEY-----\nMIIEo...PqVsbk=\n-----END RSA PRIVATE KEY-----\n",
+	 "deploy_id_rsa_pub"  :"ssh-rsa AAAAB3NzaC1yA...lPbrka6A0w== deploy@chef.mukaer.com\n",
+	 "deploy_known_hosts" : ["mukaer.com,115.179.0.91 ssh-rsa AAAAB3.....NzaC1yijSiscQ=="]
+ },
+
+ "init_setting": {
+	 "timezone" : "Japan",
+     "lang"     : "ja_JP.UTF-8",
+     "packages": ["nkf","telnet","tree"]
+ },
+
+ "init_iptables":{
+	 "ips": ["192.168.0.0/24"],
+	 "input_tcp_ports":["80"],
+	 "output_tcp_ports":["21","22","53","80","443","9418"],
+	 "output_udp_ports":["53","123"]
+ },
+
+ "ntp" :{
+	 "servers" :["ntp.nict.jp","ntp.ring.gr.jp","0.jp.pool.ntp.org","1.jp.pool.ntp.org","2.jp.pool.ntp.org"]
+ },
+
+ "mysql":{
+	 "bind_address"          : "127.0.0.1",
+	 "server_root_password"  : "mysql",
+	 "server_repl_password"  : "mysql",
+	 "server_debian_password": "mysql"
+ },
+
+ "mysql_user" : {
+	 "password" : "mysql" ,
+	 "grant_users" : [{
+					"host"       : "localhost",
+					"user"       : "mukaer",
+					"password"   : "hoge",
+					"db_name"    : "publify_dev",
+					"tbl_name"   : "*",
+                    "prive_type" : "all"
+					  },
+                     {
+					"host"       : "localhost",
+					"user"       : "mukaer",
+					"password"   : "hoge",
+					"db_name"    : "publify_tests",
+					"tbl_name"   : "*",
+                    "prive_type" : "all"
+                    },
+                    {
+					"host"       : "localhost",
+					"user"       : "mukaer",
+					"password"   : "hoge",
+					"db_name"    : "publify",
+					"tbl_name"   : "*",
+                    "prive_type" : "all"
+				}
+
+			   ]
+
+ },
+
+ "mkdir": {
+	 "dirs" : ["/var/www",
+		       "/var/www/mukaer.com",
+               "/var/www/mukaer.com/root",
+			   "/var/www/gengou.jp",
+			   "/var/www/gengou.jp/root"
+			  ]
+ },
+
+ "nginx":{
+	 "default_site_enabled": false
+
+ },
+
+ "nginx_conf":{
+	 "confs" :[{
+				   "site_name"  : "mukaer",
+				   "listen"     : "80",
+				   "server_name": "_",
+				   "root"       : "/var/www/mukaer.com/root",
+				   "servers"    : ["unix:/var/www/mukaer.com/publify/tmp/unicorn.sock fail_timeout=0"]
+			   },{
+				   "site_name"  : "gengou.jp",
+				   "listen"     : "80",
+				   "server_name": "gengou.jp",
+				   "root"       : "/var/www/gengou.jp/root",
+				   "servers"    : ["unix:/var/www/gengou.jp/app/tmp/unicorn.sock fail_timeout=0"]
+
+			  }]
+ },
+
+  "publify" : {
+      "app_root"       : "/var/www/mukaer.com/publify",
+//	  "git_repository" :"ssh://kaimu@my.mukaer.com/var/git/typo.git",
+//	  "git_revison"    :"mukaer",
+//	  "conf_uc_overwirte"   : false,
+//    "gemfile_overwrite"  : false,
+//    "rails_env"   : "production",
+      "db_username"    :"mukaer",
+	  "db_password"    :"hoge"
+
+  },
+
+ "deploy_project" : {
+	 "projects" : [{
+					   "app_root"       : "/var/www/gengou.jp/app",
+					   "git_repository" : "ssh://kaimu@my.mukaer.com/var/git/project/gengou.jp.git",
+					   "git_revison"    : "master",
+					   "commands"       : [
+						   "cd /var/www/gengou.jp/app ; source /etc/profile && bundle install --system",
+						   "chmod 775 /var/www/gengou.jp/app/tmp",
+						   "chmod 775 /var/www/gengou.jp/app/log"
+					   ]
+
+	 }]
+
+ },
+
+  "unicorn" : {
+      "apps" :[{
+				   "name" : "publify",
+				   "root" : "/var/www/mukaer.com/publify",
+				   "env"  : "development"
+
+			   },{
+				   "name" : "gengou",
+				   "root" : "/var/www/gengou.jp/app",
+				   "env"  : "development"
+
+			   }]
+
+  }
+
+}
